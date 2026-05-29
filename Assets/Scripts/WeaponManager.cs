@@ -11,18 +11,23 @@ public class WeaponManager : MonoBehaviour
         bat,
         axe,
         pistol,
-        shortgun
+        shortgun,
+        sparyCan,
+        bottle
     };
 
     public weaponSelect chosenWeapon;
     public GameObject[] weapons;
     private int weaponId = 0;
     private Animator anim;
+    private AudioSource audioPlayer;
+    public AudioClip[] weaponSounds; 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         weaponId = (int) chosenWeapon;
         anim = GetComponent<Animator>();
+        audioPlayer = GetComponent<AudioSource>();
 
         ChangeWeapons();
     }
@@ -45,6 +50,16 @@ public class WeaponManager : MonoBehaviour
             {
                 weaponId--;
                 ChangeWeapons();
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(SaveScript.inventoryOpen == false)
+            {
+                anim.SetTrigger("Attack");
+                audioPlayer.clip = weaponSounds[weaponId];
+                audioPlayer.Play();
             }
         }
     }
@@ -84,6 +99,12 @@ public class WeaponManager : MonoBehaviour
                 break;
             case weaponSelect.shortgun:
                 transform.localPosition = new Vector3(0.02f, -0.193f, 0.46f);
+                break;
+            case weaponSelect.sparyCan:
+                transform.localPosition = new Vector3(0.02f, -0.193f, 0.66f);
+                break;
+            case weaponSelect.bottle:
+                transform.localPosition = new Vector3(0.02f, -0.193f, 0.66f);
                 break;
         }
     }

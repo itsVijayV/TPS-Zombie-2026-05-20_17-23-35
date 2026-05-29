@@ -6,8 +6,10 @@ public class LookMode : MonoBehaviour
     private PostProcessVolume vol;
     public PostProcessProfile standerd;
     public PostProcessProfile nightVision;
+    public PostProcessProfile inventory;
     public GameObject nightVisionOverlay;
     public GameObject flishLightOverlay;
+    public GameObject inventoryMenu;
     private Light flishLight;
     private bool nightVisionIsOn = false;
     private bool flishLightIsOn = false;
@@ -20,6 +22,7 @@ public class LookMode : MonoBehaviour
         flishLight.enabled = false;
         nightVisionOverlay.SetActive(false);
         flishLightOverlay.SetActive(false);
+        inventoryMenu.SetActive(false); 
         vol.profile = standerd; 
     }
 
@@ -60,6 +63,37 @@ public class LookMode : MonoBehaviour
                 flishLightOverlay.SetActive(false);
                 flishLightOverlay.GetComponent<FlishLightScript>().StopDrain();
                 flishLightIsOn = false;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if(SaveScript.inventoryOpen == false)
+            {
+                vol.profile = inventory;
+                inventoryMenu.SetActive(true);
+
+                if (flishLightIsOn)
+                {
+                    flishLight.enabled = false;
+                    flishLightOverlay.SetActive(false);
+                    flishLightOverlay.GetComponent<FlishLightScript>().StopDrain();
+                    flishLightIsOn = false;
+                }
+
+                if (nightVisionIsOn)
+                {
+/*                    vol.profile = standerd;*/
+                    nightVisionOverlay.SetActive(false);
+                    nightVisionOverlay.GetComponent<NightVisionScript>().StopDrain();
+                    this.gameObject.GetComponent<Camera>().fieldOfView = 60;
+                    nightVisionIsOn = false;
+                }
+            }
+            else if (SaveScript.inventoryOpen == true)
+            {
+                vol.profile = standerd;
+                inventoryMenu.SetActive(false);
             }
         }
 
